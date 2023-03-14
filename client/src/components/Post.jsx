@@ -8,13 +8,15 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ClearIcon from '@mui/icons-material/Clear';
 import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
 import {Link} from 'react-router-dom'
+import { format } from 'timeago.js';
+
 const Image = styled('img')({
     width:"100%",
     marginTop:"16px",
     borderRadius:"4px"
 })
 
-export default function Post() {
+export default function Post({post}) {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -30,10 +32,10 @@ export default function Post() {
             <Box sx={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                 <Link to="/user/1">
                     <Box sx={{display:"flex",columnGap:"8px",alignItems:"center"}}>
-                        <Avatar/>
+                        <Avatar src={`${process.env.REACT_APP_API}images/${post.ceatorId?.profileImage}`}/>
                         <Box>
-                            <Typography sx={{fontWeight:"500"}}>Yousef Abohani</Typography>
-                            <Typography sx={{fontSize:"13px",color:"#747579"}}>2 hours ago</Typography>
+                            <Typography sx={{fontWeight:"500"}}>{post.ceatorId?.name}</Typography>
+                            <Typography sx={{fontSize:"13px",color:"#747579"}}>{format(post.createdAt)}</Typography>
                         </Box>
                     </Box>
                 </Link>
@@ -66,18 +68,17 @@ export default function Post() {
                 </Menu>
             </Box>
             <Typography sx={{fontSize:"15px",marginTop:"12px"}}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
+                {post?.content}
             </Typography>
-            <Image 
-            src={'https://cdn.britannica.com/44/102944-050-18D72EC5/Domes-mosque-Malaysia.jpg'}/>
+            {post.image&&<Image src={`${process.env.REACT_APP_API}images/${post.image}`}/>}
             <Box sx={{marginTop:"16px",display:"flex",columnGap:"30px",alignItems:"center"}}>
                 <Box sx={{display:"flex",alignItems:"center",columnGap:"6px"}}>
                     <FavoriteBorderIcon/>
-                    <Typography>12</Typography>
+                    <Typography>{post?.usersLike.length}</Typography>
                 </Box>
                 <Box sx={{display:"flex",alignItems:"center",columnGap:"6px"}}>
                     <ChatBubbleOutlineIcon/>
-                    <Typography>43</Typography>
+                    <Typography>{post?.commnets.length}</Typography>
                 </Box>
             </Box>
             <Box sx={{marginTop:"20px",display:"flex",alignItems:"center",columnGap:"8px"}}>

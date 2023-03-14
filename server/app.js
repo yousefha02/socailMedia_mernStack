@@ -38,6 +38,9 @@ const Post = require('./model/Post')
 const authRoute = require('./routes/auth')
 app.use(authRoute)
 
+const userRoute = require('./routes/user')
+app.use(userRoute)
+
 app.use((error,req,res,next)=>
 {
     console.log(error);

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
     content:{type:String},
-    photoId:{type:mongoose.Types.ObjectId,ref:"Photo"},
+    image:{type:String,default:""},
     ceatorId:{type:mongoose.Types.ObjectId,ref:"User"},
     usersLike:[
         {

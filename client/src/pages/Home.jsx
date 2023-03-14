@@ -7,9 +7,6 @@ export default function Home() {
     return (
         <Layout>
             <SharePost/>
-            <Post/>
-            <Post/>
-            <Post/>
         </Layout>
     )
 }
