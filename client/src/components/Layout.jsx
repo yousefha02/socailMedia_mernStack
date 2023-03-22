@@ -7,16 +7,31 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
 import {Link} from 'react-router-dom'
+import {logoutUser} from '../redux/userSlice'
+import {useDispatch, useSelector} from 'react-redux'
+import { useNavigate } from 'react-router-dom';
+import PersonIcon from '@mui/icons-material/Person';
 export default function Layout({children}) {
 
+    const {user} = useSelector((state)=>state.user)
     const topics = [
         {title:"Home",link:"",icon:HomeOutlinedIcon},
         {title:"Saved Posts",link:"save-posts",icon:BookmarkBorderIcon},
         {title:"Notifications",link:"",icon:NotificationsNoneIcon},
-        {title:"Explore",link:"",icon:ExploreOutlinedIcon},
+        {title:"Explore",link:"explore",icon:ExploreOutlinedIcon},
+        {title:"Profile",link:`user/${user._id}`,icon:PersonIcon},
         {title:"Messages",link:"",icon:MailOutlineIcon},
-        {title:"Logout",link:"",icon:LogoutIcon}
     ]
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    function handleLogout()
+    {
+        dispatch(logoutUser())
+        navigate('/login')
+    }
+
     return (
         <Container sx={{marginY:"30px"}}>
             <Grid container spacing={3}>
@@ -35,6 +50,14 @@ export default function Layout({children}) {
                                 </ListItem>
                             </Link>
                             ))}
+                            <ListItem disablePadding onClick={handleLogout}>
+                                <ListItemButton>
+                                <ListItemIcon>
+                                    <LogoutIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary={'Logout'} />
+                                </ListItemButton>
+                            </ListItem>
                         </List>
                     </Paper>
                 </Grid>

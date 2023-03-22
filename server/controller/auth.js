@@ -31,7 +31,7 @@ exports.login = async(req,res,next)=>
 {
     try{
         const {email,password} = req.body
-        const user = await User.findOne({where:{email:email}})
+        const user = await User.findOne({email:email})
         if(!user)
         {
             const error = new Error('Email is not found')

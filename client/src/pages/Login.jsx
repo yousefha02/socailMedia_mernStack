@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../redux/userSlice';
 
-
 const Image = styled("img")({
     width:"100%",
     height:"100vh"

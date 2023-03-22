@@ -43,8 +43,216 @@ exports.getUserPosts = async(req,res,next)=>
             error.statusCode = 404
             throw error;
         }
-        const posts = await Post.find({creatorId:userId}).populate("ceatorId").sort({ createdAt: -1 })
+        const posts = await Post.find({ceatorId:userId}).populate("ceatorId").sort({ createdAt: -1 })
         res.status(200).json({posts})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+exports.getUserPhotos = async(req,res,next)=>
+{
+    try{
+        const {userId} = req.params
+        const photos = await Photo.find({creatorId:userId})
+        res.status(200).json({photos})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+exports.getUser = async(req,res,next)=>
+{
+    try{
+        const {userId} = req.params
+        const user = await User.findById(userId)
+        if(!user)
+        {
+            const error = new Error('user is not found')
+            error.statusCode = 404
+            throw error
+        }
+        res.status(200).json({user})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+exports.changeCoverImage = async(req,res,next)=>
+{
+    try{
+        const {userId} = req.params
+        if(!req.file)
+        {
+            const error = new Error('image is not found')
+            error.statusCode = 422
+            throw error ;
+        }
+        const user = await User.findById(userId)
+        if(!user)
+        {
+            const error = new Error('user is not found')
+            error.statusCode = 404 ;
+            throw error
+        }
+        user.coverImage = req.file.filename
+        await user.save()
+        res.status(201).json({user})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+exports.changeProfileImage = async(req,res,next)=>
+{
+    try{
+        const {userId} = req.params
+        if(!req.file)
+        {
+            const error = new Error('image is not found')
+            error.statusCode = 422
+            throw error ;
+        }
+        const user = await User.findById(userId)
+        if(!user)
+        {
+            const error = new Error('user is not found')
+            error.statusCode = 404 ;
+            throw error
+        }
+        user.profileImage = req.file.filename
+        await user.save()
+        res.status(201).json({user})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+exports.editProfile = async(req,res,next)=>
+{
+    try{
+        const {userId} = req.params
+        const {name,country} = req.body
+        const user = await User.findById(userId)
+        if(!user)
+        {
+            const error = new Error('user is not found')
+            error.statusCode = 404 ;
+            throw error
+        }
+        user.name = name
+        user.country = country
+        await user.save()
+        res.status(201).json({user})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+exports.getUsers = async(req,res,next)=>
+{
+    try{
+        const users = await User.find()
+        res.status(200).json({users})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+exports.followAndUnFollowUser = async(req,res,next)=>
+{
+    try{
+        const {userId,friendId} = req.params
+        const user = await User.findById(userId)
+        const friend = await User.findById(friendId)
+        if(!user||!friend)
+        {
+            const error = new Error('user is not found')
+            error.statusCode = 404;
+            throw error
+        }
+        if(user.following.findIndex(u=>u.userId.toString()===friendId.toString())===-1)
+        {
+            user.following.push({userId:friendId})
+            friend.followers.push({userId:userId})
+        }
+        else{
+            user.following = user.following.filter(u=>u.userId.toString()!==friendId.toString())
+            friend.followers = user.followers.filter(u=>u.userId.toString()!==userId.toString())
+        }
+        await user.save()
+        await friend.save()
+        res.status(201).json({message:"success"})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+exports.getTimelinePosts = async(req,res,next)=>
+{
+    try{
+        const {userId} = req.params
+        const user = await User.findById(userId)
+        if(!user)
+        {
+            const error = new Error('user is not found')
+            error.statusCode = 404;
+            throw error;
+        }
+        const posts = await Post.find({ceatorId:userId}).populate("ceatorId")
+        const friendsPosts = await Promise.all(user.following.map(friend=>
+        {
+            return Post.find({ceatorId:friend.userId}).populate("ceatorId")
+        }))
+        res.status(200).json(posts.concat(...friendsPosts))
     }
     catch(err)
     {

@@ -19,11 +19,6 @@ const userSchema = new Schema({
             userId:{type:mongoose.Types.ObjectId,ref:"User"}
         }
     ],
-    posts:[
-        {
-            postId:{type:mongoose.Types.ObjectId,required:true}
-        }
-    ],
     savedPosts:[
         {
             postId:{type:mongoose.Types.ObjectId,required:true}

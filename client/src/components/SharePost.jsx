@@ -1,4 +1,4 @@
-import { Avatar, Box, Paper,Input, Button, Typography,styled } from '@mui/material'
+import { Box, Paper,Input, Button, Typography,styled } from '@mui/material'
 import React, { useState } from 'react'
 import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
 import EmojiEmotionsOutlinedIcon from '@mui/icons-material/EmojiEmotionsOutlined';
@@ -57,13 +57,10 @@ export default function SharePost() {
     return (
         <Paper sx={{padding:"20px"}}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Box sx={{display:"flex",columnGap:"10px",alignItems:"center"}}>
-                    <Avatar src="" sx={{width:"55px",height:"55px"}}/>
-                    <Controller
-                    name="content"
-                    control={control}
-                    render={({ field }) => <Input multiline rows={2} fullWidth {...field}/>}/>
-                </Box>
+                <Controller
+                name="content"
+                control={control}
+                render={({ field }) => <Input multiline rows={2} fullWidth {...field}/>}/>
                 {
                 image&&
                 <Box sx={{height:"300px",overflow:"auto",marginTop:"10px"}}>

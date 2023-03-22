@@ -5,8 +5,6 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import ClearIcon from '@mui/icons-material/Clear';
-import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
 import {Link} from 'react-router-dom'
 import { format } from 'timeago.js';
 
@@ -30,7 +28,7 @@ export default function Post({post}) {
     return (
         <Paper sx={{padding:"20px",marginY:"20px"}}>
             <Box sx={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                <Link to="/user/1">
+                <Link to={`/user/${post.ceatorId._id}`}>
                     <Box sx={{display:"flex",columnGap:"8px",alignItems:"center"}}>
                         <Avatar src={`${process.env.REACT_APP_API}images/${post.ceatorId?.profileImage}`}/>
                         <Box>
@@ -56,14 +54,6 @@ export default function Post({post}) {
                     <MenuItem onClick={handleClose} sx={{columnGap:"8px",marginBottom:"6px"}}>
                         <DeleteOutlineIcon/>
                         <Typography sx={{fontSize:"15px"}}>Delete</Typography>
-                    </MenuItem>
-                    <MenuItem onClick={handleClose} sx={{columnGap:"8px",marginBottom:"6px"}}>
-                        <NotificationsActiveOutlinedIcon/>
-                        <Typography sx={{fontSize:"15px"}}>Turn notifications</Typography>
-                    </MenuItem>
-                    <MenuItem onClick={handleClose} sx={{columnGap:"8px",marginBottom:"6px"}}>
-                        <ClearIcon/>
-                        <Typography sx={{fontSize:"15px"}}>Hide Post</Typography>
                     </MenuItem>
                 </Menu>
             </Box>

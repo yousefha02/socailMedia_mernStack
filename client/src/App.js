@@ -9,6 +9,7 @@ import Profile from './pages/Profile';
 import SavePosts from './pages/SavePosts';
 import Register from './pages/Register.jsx'
 import Login from './pages/Login';
+import ExploreUsers from './pages/ExploreUsers';
 
 const queryClient = new QueryClient()
 
@@ -19,6 +20,10 @@ function App() {
       primary:{
         main:"#0082f4",
         contrastText:"#ffffff"
+      },
+      Gray:{
+        main:"#fefffc",
+        contrastText:"#070815"
       }
     },
   })
@@ -30,11 +35,12 @@ function App() {
       <ThemeProvider theme={theme}>
       <div className="App">
         <Routes>
-          <Route path='' element={<Home/>}/>
-          <Route path='/user/:id' element={<Profile/>}/>
-          <Route path='save-posts' element={<SavePosts/>}/>
+          <Route path='' element={user?<Home/>:<Navigate to="login"/>}/>
+          <Route path='/user/:id' element={user?<Profile/>:<Navigate to="login"/>}/>
+          <Route path='save-posts' element={user?<SavePosts/>:<Navigate to="login"/>}/>
           <Route path='signup' element={<Register/>}/>
           <Route path='login' element={<Login/>}/>
+          <Route path='explore' element={user?<ExploreUsers/>:<Navigate to="login"/>}/>
         </Routes>
       </div>
       </ThemeProvider>
