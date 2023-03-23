@@ -175,8 +175,8 @@ export default function Profile() {
                             </Box>
                             <TabPanel value="1"><ProfilePosts userId={id}/></TabPanel>
                             <TabPanel value="2"><ProfileAbout about={data?.user?.about}/></TabPanel>
-                            <TabPanel value="3"><ProfileFolloweing/></TabPanel>
-                            <TabPanel value="4"><ProfileFollowers/></TabPanel>
+                            <TabPanel value="3"><ProfileFolloweing userId={id}/></TabPanel>
+                            <TabPanel value="4"><ProfileFollowers userId={id}/></TabPanel>
                             <TabPanel value="5"><ProfilePhotos userId={id}/></TabPanel>
                         </TabContext>
                     </Box>

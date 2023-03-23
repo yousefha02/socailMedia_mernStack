@@ -13,5 +13,7 @@ router.post('/user/edit-profile/:userId',authUser.userAuth,userCont.editProfile)
 router.get('/users',userCont.getUsers)
 router.post('/follow/:userId/:friendId',authUser.userAuth,userCont.followAndUnFollowUser)
 router.get('/timelines/:userId',authUser.userAuth,userCont.getTimelinePosts)
+router.get('/followings/:userId',userCont.getFolllowings)
+router.get('/followers/:userId',userCont.getFolllowers)
 
 module.exports = router ; 

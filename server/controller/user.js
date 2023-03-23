@@ -263,3 +263,49 @@ exports.getTimelinePosts = async(req,res,next)=>
         next(err)
     }
 }
+
+exports.getFolllowings = async(req,res,next)=>
+{
+    try{
+        const {userId} = req.params
+        const user = await User.findById(userId)
+        if(!user)
+        {
+            const error = new Error('user is not found')
+            error.statusCode = 404;
+            throw error;
+        }
+        res.status(200).json({following:user.following})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+exports.getFolllowers = async(req,res,next)=>
+{
+    try{
+        const {userId} = req.params
+        const user = await User.findById(userId).populate('followers.userId')
+        if(!user)
+        {
+            const error = new Error('user is not found')
+            error.statusCode = 404;
+            throw error;
+        }
+        res.status(200).json({followers:user.followers})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
