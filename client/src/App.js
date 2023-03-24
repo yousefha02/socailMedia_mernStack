@@ -10,6 +10,7 @@ import SavePosts from './pages/SavePosts';
 import Register from './pages/Register.jsx'
 import Login from './pages/Login';
 import ExploreUsers from './pages/ExploreUsers';
+import Messages from './pages/Messages';
 
 const queryClient = new QueryClient()
 
@@ -37,6 +38,7 @@ function App() {
         <Routes>
           <Route path='' element={user?<Home/>:<Navigate to="login"/>}/>
           <Route path='/user/:id' element={user?<Profile/>:<Navigate to="login"/>}/>
+          <Route path='/messages' element={user ? <Messages/> : <Navigate to={'/login'}/>}/>
           <Route path='save-posts' element={user?<SavePosts/>:<Navigate to="login"/>}/>
           <Route path='signup' element={<Register/>}/>
           <Route path='login' element={<Login/>}/>

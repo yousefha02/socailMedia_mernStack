@@ -20,7 +20,7 @@ export default function Layout({children}) {
         {title:"Notifications",link:"",icon:NotificationsNoneIcon},
         {title:"Explore",link:"explore",icon:ExploreOutlinedIcon},
         {title:"Profile",link:`user/${user._id}`,icon:PersonIcon},
-        {title:"Messages",link:"",icon:MailOutlineIcon},
+        {title:"Messages",link:"messages",icon:MailOutlineIcon},
     ]
 
     const dispatch = useDispatch()

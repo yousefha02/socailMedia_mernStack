@@ -8,5 +8,5 @@ async function getFollowings(userId)
 
 export const useFollowings = (userId)=>
 {
-    return useQuery('get-followings',()=>getFollowings(userId))
+    return useQuery(['get-followings',userId],()=>getFollowings(userId))
 }
