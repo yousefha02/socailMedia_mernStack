@@ -29,8 +29,6 @@ app.use((req,res,next)=>
     next();
 })
 
-const Conversaition = require('./model/Conversaition')
-const Message = require('./model/Message')
 const Photo = require('./model/Photo')
 const User = require('./model/User')
 const Post = require('./model/Post')

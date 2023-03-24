@@ -10,12 +10,6 @@ const postSchema = new Schema({
             userId:{type:mongoose.Types.ObjectId,ref:"User",required:true}
         }
     ],
-    commnets:[
-        {
-            userId:{type:mongoose.Types.ObjectId,ref:"User",required:true},
-            content:{type:String,required:true}
-        }
-    ],
     userSaved:[
         {
             userId:{type:mongoose.Types.ObjectId,ref:"User",required:true},

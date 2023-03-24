@@ -17,5 +17,8 @@ router.get('/followings/:userId',userCont.getFolllowings)
 router.get('/followers/:userId',userCont.getFolllowers)
 router.post('/save/:postId',authUser.userAuth,userCont.saveAndUnsavePost)
 router.get('/save-posts',authUser.userAuth,userCont.getUserSavedPosts)
+router.post('/like/:postId',authUser.userAuth,userCont.likePost)
+router.get('/notifications',authUser.userAuth,userCont.getUserNotifications)
+router.get('/seen-notifications',authUser.userAuth,userCont.handleSeenNotifications)
 
 module.exports = router ; 

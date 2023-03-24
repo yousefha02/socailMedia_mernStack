@@ -287,8 +287,7 @@ exports.getFolllowings = async(req,res,next)=>
     }
 }
 
-exports.getFolllowers = async(req,res,next)=>
-{
+exports.getFolllowers = async(req,res,next)=>{
     try{
         const {userId} = req.params
         const user = await User.findById(userId).populate('followers.userId')
@@ -352,6 +351,76 @@ exports.getUserSavedPosts = async(req,res,next)=>
         const userId = req.userId
         const user = await User.findById(userId).populate({path:'savedPosts.postId',populate:{path:"ceatorId"}})
         res.status(200).json({posts:user.savedPosts})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+exports.likePost = async(req,res,next)=>
+{
+    try{
+        const userId = req.userId
+        const {postId} = req.params
+        const post = await Post.findById(postId)
+        const creator = await User.findById(post.ceatorId)
+        const user = await User.findById(userId)
+        if(!post)
+        {
+            const error = new Error('post not found')
+            error.statusCode = 404
+            throw error
+        }
+        if(post.usersLike.findIndex(item=>item.userId.toString()===userId.toString())==-1)
+        {
+            post.usersLike.push({userId:userId})
+            creator.notifications.push({content:`${user.name} likes your post`})
+        }
+        else{
+            post.usersLike =  post.usersLike.filter(item=>item.userId.toString()!==userId.toString())
+        }
+        await post.save()
+        await creator.save()
+        res.status(201).json({message:"success"})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+exports.getUserNotifications = async(req,res,next)=>
+{
+    try{
+        const userId = req.userId
+        const user = await User.findById(userId)
+        res.status(200).json({notifications:user.notifications})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+exports.handleSeenNotifications = async(req,res,next)=>
+{
+    try{
+        const userId = req.userId
+        const user = await User.findById({_id:userId},{$set:{'notifications.$[].seen':true}})
+        res.status(200).json({message:"success"})
     }
     catch(err)
     {

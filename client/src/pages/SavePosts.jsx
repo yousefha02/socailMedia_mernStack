@@ -8,7 +8,6 @@ import PostSkelton from '../Skeleton/PostSkelton'
 export default function SavePosts() {
     const {token} = useSelector((state)=>state.user)
     const {data,isLoading} = useSavePosts(token)
-    console.log(data)
     return (
         <Layout>
             {

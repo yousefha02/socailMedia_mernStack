@@ -17,7 +17,7 @@ export default function Layout({children}) {
     const topics = [
         {title:"Home",link:"",icon:HomeOutlinedIcon},
         {title:"Saved Posts",link:"save-posts",icon:BookmarkBorderIcon},
-        {title:"Notifications",link:"",icon:NotificationsNoneIcon},
+        {title:"Notifications",link:"notifications",icon:NotificationsNoneIcon},
         {title:"Explore",link:"explore",icon:ExploreOutlinedIcon},
         {title:"Profile",link:`user/${user._id}`,icon:PersonIcon},
         {title:"Messages",link:"",icon:MailOutlineIcon},

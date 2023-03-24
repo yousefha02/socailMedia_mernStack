@@ -1,14 +1,14 @@
-import { Avatar, Box ,Paper, Typography,styled, Button, TextField,Menu,MenuItem} from '@mui/material'
+import { Avatar, Box ,Paper, Typography,styled, Button,Menu,MenuItem} from '@mui/material'
 import React, { useState } from 'react'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import BookmarkRemoveOutlinedIcon from '@mui/icons-material/BookmarkRemoveOutlined';
 import {Link} from 'react-router-dom'
 import { format } from 'timeago.js';
 import { useSelector } from 'react-redux';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const Image = styled('img')({
     width:"100%",
@@ -29,12 +29,37 @@ export default function Post({post}) {
     }
 
     const [isSave,setIsSave] = useState(post.userSaved?.findIndex(u=>u.userId.toString()===user._id.toString())!==-1)
+    const [isLike,setIsLike] = useState(post.usersLike?.findIndex(u=>u.userId.toString()===user._id.toString())!==-1)
+    const [likes,setLikes] = useState(post?.usersLike.length)
 
     async function savePost()
     {
         try{
             setIsSave(back=>!back)
             const response = await fetch(`${process.env.REACT_APP_API}save/${post._id}`,{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json",
+                    "Authorization":token
+                }
+            })
+            if(response.status!==200&&response.status!==201)
+            {
+                throw new Error('failed occured')
+            }
+        }
+        catch(err)
+        {
+            console.log(err)
+        }
+    }
+
+    async function likePost()
+    {
+        try{
+            isLike?setLikes(back=>back-1):setLikes(back=>back+1)
+            setIsLike(back=>!back)
+            const response = await fetch(`${process.env.REACT_APP_API}like/${post._id}`,{
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json",
@@ -98,17 +123,13 @@ export default function Post({post}) {
             {post.image&&<Image src={`${process.env.REACT_APP_API}images/${post.image}`}/>}
             <Box sx={{marginTop:"16px",display:"flex",columnGap:"30px",alignItems:"center"}}>
                 <Box sx={{display:"flex",alignItems:"center",columnGap:"6px"}}>
-                    <FavoriteBorderIcon/>
-                    <Typography>{post?.usersLike.length}</Typography>
+                    {!isLike?
+                    <FavoriteBorderIcon color="error" sx={{cursor:"pointer"}} onClick={likePost}/>
+                    :
+                    <FavoriteIcon color='error' sx={{cursor:"pointer"}} onClick={likePost}/>
+                    }
+                    <Typography>{likes}</Typography>
                 </Box>
-                <Box sx={{display:"flex",alignItems:"center",columnGap:"6px"}}>
-                    <ChatBubbleOutlineIcon/>
-                    <Typography>{post?.commnets.length}</Typography>
-                </Box>
-            </Box>
-            <Box sx={{marginTop:"20px",display:"flex",alignItems:"center",columnGap:"8px"}}>
-                <Avatar sx={{width:"45px",height:"45px"}}/>
-                <TextField fullWidth/>
             </Box>
         </Paper>
     )
