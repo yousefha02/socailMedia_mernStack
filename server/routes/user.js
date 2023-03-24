@@ -15,5 +15,7 @@ router.post('/follow/:userId/:friendId',authUser.userAuth,userCont.followAndUnFo
 router.get('/timelines/:userId',authUser.userAuth,userCont.getTimelinePosts)
 router.get('/followings/:userId',userCont.getFolllowings)
 router.get('/followers/:userId',userCont.getFolllowers)
+router.post('/save/:postId',authUser.userAuth,userCont.saveAndUnsavePost)
+router.get('/save-posts',authUser.userAuth,userCont.getUserSavedPosts)
 
 module.exports = router ; 

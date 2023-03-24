@@ -309,3 +309,56 @@ exports.getFolllowers = async(req,res,next)=>
         next(err)
     }
 }
+
+exports.saveAndUnsavePost = async(req,res,next)=>
+{
+    try{
+        const userId = req.userId
+        const {postId} = req.params
+        const post = await Post.findById(postId)
+        const user = await User.findById(userId)
+        if(!post)
+        {
+            const error = new Error('post not found')
+            error.statusCode = 404
+            throw error
+        }
+        if(user.savedPosts.findIndex(item=>item.postId.toString()===post._id.toString())==-1)
+        {
+            user.savedPosts.push({postId:postId})
+            post.userSaved.push({userId:userId})
+        }
+        else{
+            user.savedPosts = user.savedPosts.filter(item=>item.postId.toString()!==post._id.toString())
+            post.userSaved =  post.userSaved.filter(item=>item.userId.toString()!==userId.toString())
+        }
+        await user.save()
+        await post.save()
+        res.status(201).json({message:"success"})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+exports.getUserSavedPosts = async(req,res,next)=>
+{
+    try{
+        const userId = req.userId
+        const user = await User.findById(userId).populate({path:'savedPosts.postId',populate:{path:"ceatorId"}})
+        res.status(200).json({posts:user.savedPosts})
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
