@@ -49,7 +49,7 @@ app.use((error,req,res,next)=>
     res.status(status).json({message:message})
 })
 
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://yousefha02:2838293yo@cluster0.t5dqa.mongodb.net/socialMedia?retryWrites=true&w=majority')
 .then(result=>
     {

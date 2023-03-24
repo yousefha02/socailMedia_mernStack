@@ -268,7 +268,7 @@ exports.getFolllowings = async(req,res,next)=>
 {
     try{
         const {userId} = req.params
-        const user = await User.findById(userId)
+        const user = await User.findById(userId).populate('following.userId')
         if(!user)
         {
             const error = new Error('user is not found')
