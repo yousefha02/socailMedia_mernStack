@@ -10,12 +10,23 @@ import ProfileAbout from '../components/profile/ProfileAbout';
 import ProfileFolloweing from '../components/profile/ProfileFolloweing';
 import ProfileFollowers from '../components/profile/ProfileFollowers';
 import ProfilePhotos from '../components/profile/ProfilePhotos';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {useUser} from '../hooks/useUser'
 import { deepPurple } from '@mui/material/colors';
 import ImageIcon from '@mui/icons-material/Image';
 import EditProfile from '../components/profile/EditProfile';
+import ChatIcon from '@mui/icons-material/Chat';
+import {
+    collection,
+    query,
+    where,
+    getDocs,
+    addDoc,
+    Timestamp,
+    or,
+} from "firebase/firestore";
+import { db } from '../firebase'
 
 const CoverImage = styled("img")({
     width:"100%",
@@ -114,6 +125,21 @@ export default function Profile() {
         setOpenEditProfile(false);
     };
 
+    const navigate = useNavigate();
+    const handleCreateMessage = async () =>{
+        const q = query(collection(db, "chats"), 
+        where("members", "in", [[user._id , id]]),
+        );
+        const res = await getDocs(q);
+        console.log(res.empty);
+        if(res.empty){
+            console.log(res.docs);
+            const time = Timestamp.now();
+            await addDoc(collection(db, "chats"), { messages: [] , members :[user._id,id],lastmessage:time });
+        }
+        // navigate(`/messages`);
+    }
+
     return (
         <Layout>
             {
@@ -154,9 +180,13 @@ export default function Profile() {
                                 <Typography sx={{color:"#747579",fontSize:"15px"}}>{data?.user?.country}</Typography>
                             </Box>
                         </Box>
-                        {user._id===id&&
+                        {user._id===id?
                         <Button onClick={handleClickOpen}
                         variant="contained" color="Gray" sx={{textTransform:"capitalize"}}>Edit Profile</Button>
+                        :
+                        <Button onClick={handleCreateMessage}>
+                            <ChatIcon/>
+                        </Button>
                         }
                         <Dialog open={openEditProfile} onClose={handleClose}>
                             <EditProfile handleClose={handleClose} name={data?.user?.name} country={data?.user?.country}/>
