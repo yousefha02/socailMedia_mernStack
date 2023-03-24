@@ -21,7 +21,7 @@ const userSchema = new Schema({
     ],
     savedPosts:[
         {
-            postId:{type:mongoose.Types.ObjectId,required:true}
+            postId:{type:mongoose.Types.ObjectId,required:true,ref:"Post"}
         }
     ],
     notifications:[
