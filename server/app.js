@@ -32,6 +32,7 @@ app.use((req,res,next)=>
 const Photo = require('./model/Photo')
 const User = require('./model/User')
 const Post = require('./model/Post')
+const Notifications = require('./model/Notifications')
 
 const authRoute = require('./routes/auth')
 app.use(authRoute)

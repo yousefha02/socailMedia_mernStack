@@ -5,6 +5,7 @@ import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsAc
 import { useNotifications } from '../hooks/useNotifications';
 import { useSeenNot } from '../hooks/useSeenNot';
 import { useSelector } from 'react-redux';
+import {format} from 'timeago.js'
 
 const Wrapper = styled(Box)({
     display:"flex",
@@ -45,7 +46,7 @@ export default function Notifications() {
                                 <Typography sx={{fontSize:"15px",color:"#303030",fontWeight:"400",marginBottom:"8px"}}>
                                     {noti.content}
                                 </Typography>
-                                <Typography sx={{fontSize:"13px",color:"#949494",fontWeight:"500"}}> قبل 5 دقائق  </Typography>
+                                <Typography sx={{fontSize:"13px",color:"#949494",fontWeight:"500"}}>{format(noti.createdAt)}</Typography>
                             </Box>
                         </Wrapper>
                     )

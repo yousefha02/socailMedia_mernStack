@@ -10,11 +10,8 @@ import SavePosts from './pages/SavePosts';
 import Register from './pages/Register.jsx'
 import Login from './pages/Login';
 import ExploreUsers from './pages/ExploreUsers';
-<<<<<<< HEAD
 import Notifications from './pages/Notifications'
-=======
 import Messages from './pages/Messages';
->>>>>>> b38667fa27761be6f9eeec580da8553ebfe27e59
 
 const queryClient = new QueryClient()
 
@@ -42,11 +39,8 @@ function App() {
         <Routes>
           <Route path='' element={user?<Home/>:<Navigate to="login"/>}/>
           <Route path='/user/:id' element={user?<Profile/>:<Navigate to="login"/>}/>
-<<<<<<< HEAD
           <Route path='/notifications' element={user?<Notifications/>:<Navigate to="login"/>}/>
-=======
           <Route path='/messages' element={user ? <Messages/> : <Navigate to={'/login'}/>}/>
->>>>>>> b38667fa27761be6f9eeec580da8553ebfe27e59
           <Route path='save-posts' element={user?<SavePosts/>:<Navigate to="login"/>}/>
           <Route path='signup' element={<Register/>}/>
           <Route path='login' element={<Login/>}/>

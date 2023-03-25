@@ -27,7 +27,8 @@ const userSchema = new Schema({
     notifications:[
         {
             content:{type:String,requried:true},
-            seen:{type:Boolean,default:false}
+            seen:{type:Boolean,default:false},
+            time:{type:Date,required:true}
         }
     ]
 },{timestamps:true})

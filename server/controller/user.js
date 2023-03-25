@@ -1,6 +1,7 @@
 const Photo = require('../model/Photo')
 const User = require('../model/User')
 const Post = require('../model/Post')
+const Notifications = require('../model/Notifications')
 
 exports.sharePost = async(req,res,next)=>
 {
@@ -217,6 +218,7 @@ exports.followAndUnFollowUser = async(req,res,next)=>
         {
             user.following.push({userId:friendId})
             friend.followers.push({userId:userId})
+            const notification = await Notifications.create({content:`${user.name} followed you`,userId:friend._id})
         }
         else{
             user.following = user.following.filter(u=>u.userId.toString()!==friendId.toString())
@@ -368,7 +370,6 @@ exports.likePost = async(req,res,next)=>
         const userId = req.userId
         const {postId} = req.params
         const post = await Post.findById(postId)
-        const creator = await User.findById(post.ceatorId)
         const user = await User.findById(userId)
         if(!post)
         {
@@ -379,13 +380,12 @@ exports.likePost = async(req,res,next)=>
         if(post.usersLike.findIndex(item=>item.userId.toString()===userId.toString())==-1)
         {
             post.usersLike.push({userId:userId})
-            creator.notifications.push({content:`${user.name} likes your post`})
+            const notification = await Notifications.create({content:`${user.name} liked your post`,userId:post.ceatorId})
         }
         else{
             post.usersLike =  post.usersLike.filter(item=>item.userId.toString()!==userId.toString())
         }
         await post.save()
-        await creator.save()
         res.status(201).json({message:"success"})
     }
     catch(err)
@@ -402,8 +402,8 @@ exports.getUserNotifications = async(req,res,next)=>
 {
     try{
         const userId = req.userId
-        const user = await User.findById(userId)
-        res.status(200).json({notifications:user.notifications})
+        const notifications = await Notifications.find({userId:userId}).sort({createdAt:-1})
+        res.status(200).json({notifications:notifications})
     }
     catch(err)
     {
@@ -419,7 +419,7 @@ exports.handleSeenNotifications = async(req,res,next)=>
 {
     try{
         const userId = req.userId
-        const user = await User.findById({_id:userId},{$set:{'notifications.$[].seen':true}})
+        const notifications = await Notifications.updateMany({userId:userId},{$set:{seen:true}})
         res.status(200).json({message:"success"})
     }
     catch(err)

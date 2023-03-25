@@ -6,7 +6,6 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import ProfilePosts from '../components/profile/ProfilePosts';
-import ProfileAbout from '../components/profile/ProfileAbout';
 import ProfileFolloweing from '../components/profile/ProfileFolloweing';
 import ProfileFollowers from '../components/profile/ProfileFollowers';
 import ProfilePhotos from '../components/profile/ProfilePhotos';
@@ -197,14 +196,12 @@ export default function Profile() {
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 <Tab sx={{textTransform:"capitalize"}} label="Posts" value="1" />
-                                <Tab sx={{textTransform:"capitalize"}} label="About" value="2" />
                                 <Tab sx={{textTransform:"capitalize"}} label="Followings" value="3" />
                                 <Tab sx={{textTransform:"capitalize"}} label="Followers" value="4" />
                                 <Tab sx={{textTransform:"capitalize"}} label="Photos" value="5" />
                             </TabList>
                             </Box>
                             <TabPanel value="1"><ProfilePosts userId={id}/></TabPanel>
-                            <TabPanel value="2"><ProfileAbout about={data?.user?.about}/></TabPanel>
                             <TabPanel value="3"><ProfileFolloweing userId={id}/></TabPanel>
                             <TabPanel value="4"><ProfileFollowers userId={id}/></TabPanel>
                             <TabPanel value="5"><ProfilePhotos userId={id}/></TabPanel>
