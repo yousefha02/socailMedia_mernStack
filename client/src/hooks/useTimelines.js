@@ -12,5 +12,5 @@ async function getUser(userId,token)
 
 export const useTimelines = (userId,token)=>
 {
-    return useQuery('get-timelines',()=>getUser(userId,token))
+    return useQuery(['get-timelines', userId],()=>getUser(userId,token))
 }
