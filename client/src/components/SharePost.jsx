@@ -15,7 +15,7 @@ const Label = styled("label")({
 
 const Image = styled('img')({width:"100%"})
 
-export default function SharePost() {
+export default function SharePost({setNewPost}) {
     const [image,setImage] = useState(null)
     const [load,setLoad] = useState(false);
     const [openEmoji,setOpenEmoji] = useState(false)
@@ -46,7 +46,7 @@ export default function SharePost() {
             setImage("")
             reset({content:""})
             setLoad(false)
-            console.log(data)
+            setNewPost(data.post);
         }
         catch(err)
         {

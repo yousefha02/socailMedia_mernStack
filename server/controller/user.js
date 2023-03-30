@@ -21,7 +21,31 @@ exports.sharePost = async(req,res,next)=>
             await Photo.create({image:post.image,creatorId:req.userId})
         }
         await post.save()
-        res.status(200).json({post})
+        const newPost = await Post.findById(post._id).populate('ceatorId');
+        res.status(200).json({post:newPost});
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
+
+module.exports.deletePost = async (req,res,next) => {
+    const {postId} = req.params;
+    const userId = req.userId
+    try{
+        const post = await Post.findById(postId);
+        if(post.ceatorId.toString() !== userId){
+            const error = new Error('cant delete post');
+            error.statusCode =401;
+            throw error;
+        }
+        await post.remove(); 
+        res.status(201).json({message:"post has been deleted"});
     }
     catch(err)
     {
@@ -44,7 +68,7 @@ exports.getUserPosts = async(req,res,next)=>
             error.statusCode = 404
             throw error;
         }
-        const posts = await Post.find({ceatorId:userId}).populate("ceatorId").sort({ createdAt: -1 })
+        const posts = await Post.find({ceatorId:userId}).populate("ceatorId").sort({ createdAt:"desc" })
         res.status(200).json({posts})
     }
     catch(err)
@@ -402,7 +426,7 @@ exports.getUserNotifications = async(req,res,next)=>
 {
     try{
         const userId = req.userId
-        const notifications = await Notifications.find({userId:userId}).sort({createdAt:-1})
+        const notifications = await Notifications.find({userId:userId}).sort({createdAt:"desc"});
         res.status(200).json({notifications:notifications})
     }
     catch(err)

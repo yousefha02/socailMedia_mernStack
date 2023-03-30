@@ -9,6 +9,7 @@ import {Link} from 'react-router-dom'
 import { format } from 'timeago.js';
 import { useSelector } from 'react-redux';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { useTimelines } from '../hooks/useTimelines';
 
 const Image = styled('img')({
     width:"100%",
@@ -16,9 +17,10 @@ const Image = styled('img')({
     borderRadius:"4px"
 })
 
-export default function Post({post}) {
+export default function Post({post,filterPosts,savePage}) {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const {refetch} = useTimelines();
     const {user,token} = useSelector((state)=>state.user)
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -35,6 +37,9 @@ export default function Post({post}) {
     async function savePost()
     {
         try{
+            if(savePage){
+                isSave && filterPosts(post._id)
+            }
             setIsSave(back=>!back)
             const response = await fetch(`${process.env.REACT_APP_API}save/${post._id}`,{
                 method:"POST",
@@ -47,6 +52,28 @@ export default function Post({post}) {
             {
                 throw new Error('failed occured')
             }
+        }
+        catch(err)
+        {
+            console.log(err)
+        }
+    }
+
+    async function deletePost()
+    {
+        try{
+            const response = await fetch(`${process.env.REACT_APP_API}delete/${post._id}`,{
+                method:"DELETE",
+                headers:{
+                    "Content-Type":"application/json",
+                    "Authorization":token
+                }
+            })
+            if(response.status!==200&&response.status!==201)
+            {
+                throw new Error('failed occured')
+            }
+            refetch();
         }
         catch(err)
         {
@@ -111,10 +138,13 @@ export default function Post({post}) {
                         <Typography sx={{fontSize:"15px"}}>Unsave Post</Typography>
                     </MenuItem>
                     }
-                    <MenuItem onClick={handleClose} sx={{columnGap:"8px",marginBottom:"6px"}}>
-                        <DeleteOutlineIcon/>
-                        <Typography sx={{fontSize:"15px"}}>Delete</Typography>
-                    </MenuItem>
+                    {
+                        user._id === post.ceatorId._id &&
+                        <MenuItem onClick={()=>{deletePost(); handleClose();}} sx={{columnGap:"8px",marginBottom:"6px"}}>
+                            <DeleteOutlineIcon/>
+                            <Typography sx={{fontSize:"15px"}}>Delete</Typography>
+                        </MenuItem>
+                    }
                 </Menu>
             </Box>
             <Typography sx={{fontSize:"15px",marginTop:"12px"}}>
