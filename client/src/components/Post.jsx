@@ -138,13 +138,13 @@ export default function Post({post,filterPosts,savePage}) {
                         <Typography sx={{fontSize:"15px"}}>Unsave Post</Typography>
                     </MenuItem>
                     }
-                    {
+                    {/* {
                         user._id === post.ceatorId._id &&
                         <MenuItem onClick={()=>{deletePost(); handleClose();}} sx={{columnGap:"8px",marginBottom:"6px"}}>
                             <DeleteOutlineIcon/>
                             <Typography sx={{fontSize:"15px"}}>Delete</Typography>
                         </MenuItem>
-                    }
+                    } */}
                 </Menu>
             </Box>
             <Typography sx={{fontSize:"15px",marginTop:"12px"}}>
